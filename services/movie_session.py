@@ -14,17 +14,27 @@ def create_movie_session(
 
 
 def get_movies_sessions(
-    session_date: str = None,
-    movie_id: int = None,
-    cinema_hall_id: int = None
+    session_date: str | None = None,
+    movie_id: int | None = None,
+    cinema_hall_id: int | None = None
 ) -> QuerySet:
     queryset = MovieSession.objects.all()
-    if session_date:
+
+    if session_date is not None:
+        if session_date == "":
+            return MovieSession.objects.none()
         queryset = queryset.filter(show_time__date=session_date)
-    if movie_id:
+
+    if movie_id is not None:
+        if movie_id == 0:
+            return MovieSession.objects.none()
         queryset = queryset.filter(movie_id=movie_id)
-    if cinema_hall_id:
+
+    if cinema_hall_id is not None:
+        if cinema_hall_id == 0:
+            return MovieSession.objects.none()
         queryset = queryset.filter(cinema_hall_id=cinema_hall_id)
+
     return queryset
 
 
@@ -34,16 +44,16 @@ def get_movie_session_by_id(movie_session_id: int) -> MovieSession:
 
 def update_movie_session(
     session_id: int,
-    show_time: str = None,
-    movie_id: int = None,
-    cinema_hall_id: int = None,
+    show_time: str | None = None,
+    movie_id: int | None = None,
+    cinema_hall_id: int | None = None,
 ) -> None:
     movie_session = MovieSession.objects.get(id=session_id)
-    if show_time:
+    if show_time is not None:
         movie_session.show_time = show_time
-    if movie_id:
+    if movie_id is not None:
         movie_session.movie_id = movie_id
-    if cinema_hall_id:
+    if cinema_hall_id is not None:
         movie_session.cinema_hall_id = cinema_hall_id
     movie_session.save()
 
